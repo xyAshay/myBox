@@ -9,29 +9,20 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-type config struct {
-	port string
-	host string
-}
-
-var cfg = config{}
-
-func setConfig() {
-	kingpin.HelpFlag.Short('h')
-	kingpin.Flag("port", "Target Port").Short('p').Default(":3000").StringVar(&cfg.port)
-	kingpin.Flag("host", "Hostname").Default("localhost").StringVar(&cfg.host)
-	kingpin.Parse()
-}
+var (
+	port = kingpin.Flag("port", "Target Port").Short('p').Default(":3000").String()
+	dev  = kingpin.Flag("dev", "Enable Developer Mode").Short('d').Bool()
+)
 
 func getLanding(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<h1>Bucket Landing</h1>")
 }
 
 func main() {
-	setConfig()
+	kingpin.Parse()
 	app := mux.NewRouter()
 
 	app.HandleFunc("/", getLanding)
-	log.Println("Server Running On https://" + cfg.host + cfg.port)
-	http.ListenAndServe(cfg.port, app)
+	fmt.Printf("Server Running on https://localhost:%s \nDeveloper : %t", *port, *dev)
+	log.Fatal(http.ListenAndServe(*port, app))
 }
