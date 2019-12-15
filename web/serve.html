@@ -20,8 +20,11 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td><a href="javascript:history.back()"> .. </a></td>
+                    </tr>
                     <tr v-for="file in files">
-                        <td><a href="#"> {{file.name}} </a></td>
+                        <td><a :href="currpath +'/'+ file.name +'/'"> {{file.name}} </a></td>
                         <td><a href="#"> {{file.size}} </a></td>
                         <td><a href="#"> Download</a></td>
                     </tr>
@@ -48,7 +51,7 @@
             }
         })
         $.getJSON(("/api/json"+location.pathname).replace('/serve/','/'), (res) => {
-            main.currpath = location.pathname.replace('/serve/', '/')
+            main.currpath = location.pathname
             main.files = res
         })
     </script>
