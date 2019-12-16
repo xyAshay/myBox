@@ -10,14 +10,13 @@
 <body>
     <div id="app" class="container">
         <h2 class="text-center">myBox Testing</h2>
-        <br> <br>
-        <h4 class="text-center">Path : {{currpath}}</h4>
+        <br>
         <div class="col-md-12">
             <table class="table">
                 <thead>
                     <th>Name</th>
-                    <th>Size</th>
-                    <th>Action</th>
+                    <th class="text-center">Size</th>
+                    <th class="text-center">Action</th>
                 </thead>
                 <tbody>
                     <tr>
@@ -25,8 +24,8 @@
                     </tr>
                     <tr v-for="file in files">
                         <td><a :href="currpath +'/'+ file.name +'/'"> {{file.name}} </a></td>
-                        <td><a href="#"> {{file.size}} </a></td>
-                        <td><a href="#"> Download</a></td>
+                        <td class="text-center"><a href="#"> {{file.size}} </a></td>
+                        <td class="text-center"><a href="#"> Download</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -52,6 +51,7 @@
         })
         $.getJSON(("/api/json"+location.pathname).replace('/serve/','/'), (res) => {
             main.currpath = location.pathname
+            res.sort((a,b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0)); 
             main.files = res
         })
     </script>

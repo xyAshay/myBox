@@ -52,9 +52,15 @@ func (info *serverInfo) getLanding(w http.ResponseWriter, r *http.Request) {
 
 func (info *serverInfo) getPath(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)["path"]
-	log.Println("Current Path ", info.root, path)
-	http.ServeFile(w, r, "./web/serve.html")
-	//http.ServeFile(w, r, filepath.Join(info.root, path))
+	currPath := filepath.Join(info.root, path)
+	log.Println("Current Path ", currPath)
+	pathInfo, err := os.Stat(currPath)
+	if err == nil && pathInfo.IsDir() {
+		http.ServeFile(w, r, "./web/serve.html")
+	} else {
+		http.ServeFile(w, r, filepath.Join(info.root, path))
+
+	}
 }
 
 func (info *serverInfo) getJSONlisting(w http.ResponseWriter, r *http.Request) {
@@ -80,10 +86,10 @@ func (info *serverInfo) getJSONlisting(w http.ResponseWriter, r *http.Request) {
 		}
 		if file.IsDir() {
 			newFile.Type = "dir"
-			newFile.Size = "-1"
+			newFile.Size = "-"
 		} else {
 			newFile.Type = "file"
-			newFile.Size = "0"
+			newFile.Size = fmt.Sprintf("%.2f KB", float64(file.Size())/1024)
 		}
 		list = append(list, newFile)
 	}
