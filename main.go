@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -43,6 +44,7 @@ func createServer(root string) *serverInfo {
 	router.HandleFunc("/", init.getLanding)
 	router.HandleFunc("/serve/{path:.*}", init.getPath)
 	router.HandleFunc("/api/json/{path:.*}", init.getJSONlisting)
+	router.HandleFunc("/api/upload/{path:.*}", init.uploadFile)
 	return init
 }
 
@@ -96,6 +98,38 @@ func (info *serverInfo) getJSONlisting(w http.ResponseWriter, r *http.Request) {
 	data, _ := json.Marshal(list)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)
+}
+
+func (info *serverInfo) uploadFile(w http.ResponseWriter, r *http.Request) {
+	path := mux.Vars(r)["path"]
+	uploadPath := filepath.Join(info.root, path)
+	r.ParseMultipartForm(10 << 20)
+
+	file, handler, err := r.FormFile("target")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+	fmt.Printf("File Size: %+v Bytes\n", handler.Size)
+
+	tmpFile, err := ioutil.TempFile(uploadPath, handler.Filename)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer tmpFile.Close()
+
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	tmpFile.Write(data)
+	fmt.Println("File Sucessfully Uploaded")
 }
 
 func (info *serverInfo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
