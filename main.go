@@ -44,6 +44,7 @@ func createServer(root string) *serverInfo {
 	router.HandleFunc("/", init.getLanding)
 	router.HandleFunc("/serve/{path:.*}", init.getPath)
 	router.HandleFunc("/api/json/{path:.*}", init.getJSONlisting)
+	router.HandleFunc("/api/download/{path:.*}", init.uploadFile)
 	router.HandleFunc("/api/upload/{path:.*}", init.uploadFile)
 	return init
 }
@@ -100,6 +101,14 @@ func (info *serverInfo) getJSONlisting(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func (info *serverInfo) downloadFile(w http.ResponseWriter, r *http.Request) {
+	path := mux.Vars(r)["path"]
+	w.Header().Set("Content-Disposition", "attachment")
+	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+	w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
+	http.ServeFile(w, r, filepath.Join(info.root, path))
+}
+
 func (info *serverInfo) uploadFile(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)["path"]
 	uploadPath := filepath.Join(info.root, path)
@@ -115,7 +124,8 @@ func (info *serverInfo) uploadFile(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
 	fmt.Printf("File Size: %+v Bytes\n", handler.Size)
 
-	tmpFile, err := ioutil.TempFile(uploadPath, handler.Filename)
+	os.Chdir(uploadPath)
+	tmpFile, err := os.Create(handler.Filename)
 	if err != nil {
 		fmt.Println(err)
 		return
