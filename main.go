@@ -42,7 +42,8 @@ func createServer(root string) *serverInfo {
 	}
 	log.Printf("Root : %s\n", init.root)
 	router.HandleFunc("/api/json/{path:.*}", init.getJSONlisting)
-	router.HandleFunc("/api/download/{path:.*}", init.uploadFile)
+	router.HandleFunc("/api/delete/{path:.*}", init.removeFile)
+	router.HandleFunc("/api/download/{path:.*}", init.downloadFile)
 	router.HandleFunc("/api/upload/{path:.*}", init.uploadFile)
 	router.HandleFunc("/serve/{path:.*}", init.getPath)
 	router.HandleFunc("/", init.getLanding)
@@ -136,6 +137,13 @@ func (info *serverInfo) uploadFile(w http.ResponseWriter, r *http.Request) {
 
 	tmpFile.Write(data)
 	fmt.Println("File Sucessfully Uploaded")
+}
+
+func (info *serverInfo) removeFile(w http.ResponseWriter, r *http.Request) {
+	path := mux.Vars(r)["path"]
+	filePath := filepath.Join(info.root, path)
+	fmt.Println(filePath + "  Successfully Deleted ...")
+	os.Remove(filePath)
 }
 
 func (info *serverInfo) ServeHTTP(w http.ResponseWriter, r *http.Request) {

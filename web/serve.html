@@ -36,6 +36,9 @@
                         <td class="text-center">
                             <template v-if="file.type == 'file'">
                                 <a :href="'/api/download/'+ file.path +'?download=true'">Download</a>
+                                -  -
+                                <!-- <a href="#" class="deleteBtn">Delete</a> -->
+                                <a :href="'/api/delete/'+ file.path" class="deleteBtn">Delete</a>
                             </template>
                         </td>
                     </tr>
@@ -66,27 +69,40 @@
             res.sort((a,b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0)); 
             main.files = res;
         });
-        $(".custom-file-input").on("change",function () {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-        });
 
-        $('#uploadform').submit(function(e){
-            e.preventDefault();
-            $.ajax({
-                url: ('/api/upload'+location.pathname).replace('/serve/','/'),
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                contentType: false,
-                processData: false,
-                data: new FormData($('#uploadform')[0]),
-                success: () => {
-                    alert("File Uploaded");
-                    location.reload();
-                }
+        $(document).ready(() => {
+            $('#uploadform').submit(function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: ('/api/upload'+location.pathname).replace('/serve/','/'),
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    contentType: false,
+                    processData: false,
+                    data: new FormData($('#uploadform')[0]),
+                    success: () => {
+                        alert("File Uploaded");
+                        location.reload();
+                    }
+                });
+            });
+            
+            $(".custom-file-input").on("change",function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+            
+            $(".deleteBtn").on('click', function (e){
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('href'),
+                    success: () =>{
+                        alert("File Deleted");
+                        location.reload();                
+                    }
+                });
             });
         });
-
     </script>
 </body>
 </html>
