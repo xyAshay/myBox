@@ -61,7 +61,6 @@
                 }
             }
         })
-        $('#uploadform').attr('action', ('/api/upload'+location.pathname).replace('/serve/','/'));
         $.getJSON(("/api/json"+location.pathname).replace('/serve/','/'), (res) => {
             main.currpath = location.pathname;
             res.sort((a,b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0)); 
@@ -71,6 +70,23 @@
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
+
+        $('#uploadform').submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                url: ('/api/upload'+location.pathname).replace('/serve/','/'),
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                contentType: false,
+                processData: false,
+                data: new FormData($('#uploadform')[0]),
+                success: () => {
+                    alert("File Uploaded");
+                    location.reload();
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
