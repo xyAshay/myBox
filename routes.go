@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/gorilla/mux"
 )
@@ -59,6 +60,10 @@ func (info *serverInfo) getJSONlisting(w http.ResponseWriter, r *http.Request) {
 		}
 		list = append(list, newFile)
 	}
+
+	sort.Slice(list, func(i, j int) bool {
+		return list[i].Name < list[j].Name
+	})
 	data, _ := json.Marshal(list)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(data)
