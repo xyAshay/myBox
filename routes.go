@@ -113,6 +113,12 @@ func (info *serverInfo) removeFile(w http.ResponseWriter, r *http.Request) {
 	os.Remove(filePath)
 }
 
+func (info *serverInfo) getAssets(w http.ResponseWriter, r *http.Request) {
+	path := mux.Vars(r)["path"]
+	filepath := filepath.Join("./web", path)
+	http.ServeFile(w, r, filepath)
+}
+
 func (info *serverInfo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	info.router.ServeHTTP(w, r)
 }

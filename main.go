@@ -37,12 +37,13 @@ func createServer(root string) *serverInfo {
 		router: router,
 	}
 	log.Printf("Root : %s\n", init.root)
-	router.HandleFunc("/api/json/{path:.*}", init.getJSONlisting)
-	router.HandleFunc("/api/delete/{path:.*}", init.removeFile)
-	router.HandleFunc("/api/download/{path:.*}", init.downloadFile)
-	router.HandleFunc("/api/upload/{path:.*}", init.uploadFile)
-	router.HandleFunc("/serve/{path:.*}", init.getPath)
-	router.HandleFunc("/", init.getLanding)
+	router.HandleFunc("/api/json/{path:.*}", init.getJSONlisting).Methods("GET")
+	router.HandleFunc("/api/delete/{path:.*}", init.removeFile).Methods("DELETE")
+	router.HandleFunc("/api/download/{path:.*}", init.downloadFile).Methods("GET")
+	router.HandleFunc("/api/upload/{path:.*}", init.uploadFile).Methods("PUT")
+	router.HandleFunc("/api/assets/{path:.*}", init.getAssets).Methods("GET")
+	router.HandleFunc("/serve/{path:.*}", init.getPath).Methods("GET")
+	router.HandleFunc("/", init.getLanding).Methods("GET")
 	return init
 }
 

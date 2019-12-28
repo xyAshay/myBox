@@ -5,104 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Files</title>
+    <link rel="stylesheet" href="/api/assets/css/serve.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/api/assets/css/bootstrap.css">
+    <title>myBox Server</title>
 </head>
 <body>
-    <div id="app" class="container">
-        <div class="col-md-12">
-            <h3 class="text-center">myBox Testing</h3>
-            <br>
-            <form enctype="multipart/form-data" method="POST" id="uploadform">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="customFile" name="target">
-                  <label class="custom-file-label" for="customFile">Choose file</label>
-                  <input  id="uploadbtn" type="submit" value="Upload File">
-                </div>
-              </form>
-            <table class="table">
-                <thead class="table-active">
-                    <th>Name</th>
-                    <th class="text-center">Size</th>
-                    <th class="text-center">Action</th>
+   <div id="app" class="container">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-8">
+                <table class="table">
+                    <thead class="thead-dark"> 
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Size</th>
+                        <th class="text-center">Action</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><a href="javascript:history.back()"> .. </a></td>
-                    </tr>
-                    <tr v-for="file in files">
-                        <td><a :href="file.path"> {{file.name}} </a></td>
-                        <td class="text-center"><a href="#"> {{file.size}} </a></td>
-                        <td class="text-center">
-                            <template v-if="file.type == 'file'">
-                                <a :href="'/api/download/'+ file.path +'?download=true'">Download</a>
-                                -  -
-                                <!-- <a href="#" class="deleteBtn">Delete</a> -->
-                                <a :href="'/api/delete/'+ file.path" class="deleteBtn">Delete</a>
-                            </template>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><a href="javascript:history.back()"> ... </a></td>
+                        </tr>
+                        <tr v-for="file in files">
+                            <td><a :href="'/serve/' + file.path ">{{file.name}}</a></td>
+                            <td class="text-center">{{file.size}}</td>
+                            <td class="text-right" v-if="file.type == 'file'"><a class="btn btn-dark" :href="'/api/download/'+file.path+'?download=true'" role="button"><i class="fa fa-download"></i></a> <button class="btn btn-danger" v-on:click="deleteFile(file.path)" role="button"><i class="fa fa-trash"></i></button> </td>
+                            <td class="text-right" v-else><a class="btn btn-danger" :href="'/api/delete/'+file.path" role="button"><i class="fa fa-trash"></i></a></td>
+                        </tr>
                 </tbody>
-            </table>
+                </table>
+            </div>
         </div>
+   </div>
+   <footer id="sticky-footer" class="py-2 bg-dark text-white-50">
+    <div class="container text-center">
+      <small>Buy Me A Coffee <a href="https://github.com/xyAshay">@xyAshay</a></small>
     </div>
-
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
-    </script>
-    <script>
-        var main = new Vue({
-            el: "#app",
-            data: () => {
-                return {
-                    files: [{
-                        name: "Loading...",
-                        size: "Loading...",
-                        action: "Loading..."
-                    }],
-                    currpath: ''
-                }
-            }
-        })
-        $.getJSON(("/api/json"+location.pathname).replace('/serve/','/'), (res) => {
-            main.currpath = location.pathname;
-            res.sort((a,b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0)); 
-            main.files = res;
-        });
-
-        $(document).ready(() => {
-            $('#uploadform').submit(function(e){
-                e.preventDefault();
-                $.ajax({
-                    url: ('/api/upload'+location.pathname).replace('/serve/','/'),
-                    type: 'POST',
-                    enctype: 'multipart/form-data',
-                    contentType: false,
-                    processData: false,
-                    data: new FormData($('#uploadform')[0]),
-                    success: () => {
-                        alert("File Uploaded");
-                        location.reload();
-                    }
-                });
-            });
-            
-            $(".custom-file-input").on("change",function () {
-                var fileName = $(this).val().split("\\").pop();
-                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-            });
-            
-            $(".deleteBtn").on('click', function (e){
-                e.preventDefault();
-                $.ajax({
-                    url: $(this).attr('href'),
-                    success: () =>{
-                        alert("File Deleted");
-                        location.reload();                
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/api/assets/js/serve.js"></script>
 </body>
 </html>
