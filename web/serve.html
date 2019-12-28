@@ -8,9 +8,16 @@
     <link rel="stylesheet" href="/api/assets/css/serve.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="/api/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/api/assets/css/serve.css">
     <title>myBox Server</title>
 </head>
 <body>
+    <nav class="navbar navbar-expand-sm bg-transparent justify-content-center">
+     <ul class="navbar-nav">
+         <li><img id="brand" src="/api/assets/logo.png" alt="Logo"></li>
+     </ul>   
+    </nav>
+    
    <div id="app" class="container">
         <div class="row h-100 justify-content-center align-items-center">
             <div class="col-md-8">
@@ -22,7 +29,12 @@
                 </thead>
                 <tbody>
                         <tr>
-                            <td><a href="javascript:history.back()"> ... </a></td>
+                            <td><a href="javascript:history.back()" class="btn btn-outline-danger">Back</a></td>
+                            <td> </td>
+                            <td class="text-right"><form action="#" class="inline-form" id="uploadform">
+                                <label id="uploader" class="btn btn-outline-primary">Upload File<input type="file" name="target" hidden></label>
+                                <div id="confirmUpload"><button class="btn btn-outline-success">Confirm</button></div>
+                            </form></td>
                         </tr>
                         <tr v-for="file in files">
                             <td><a :href="'/serve/' + file.path ">{{file.name}}</a></td>

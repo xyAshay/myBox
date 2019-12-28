@@ -17,15 +17,47 @@ new Vue({
     },
     methods:{
         deleteFile(path){
-            $.ajax({
-                url:"/api/delete/"+path,
-                type: "DELETE",
-                success(){
-                    alert("File " + path +" deleted");
-                    location.reload();
-                }
-            });
+            var r = confirm("Delete File "+path);
+            if(r == true){
+                $.ajax({
+                    url:"/api/delete/"+path,
+                    type: "DELETE",
+                    success(){
+                        alert("File " + path +" deleted");
+                        location.reload();
+                    }
+                });
+            }
+            else{
+                alert("Deletion Cancelled!!");
+                location.reload();
+            }
         }
     }
 })
+
+$(document).ready(() => {
+    $("#confirmUpload").hide();
+
+    $("#uploader").change(() => {
+        $("#uploader").hide();
+        $("#confirmUpload").show();
+    });
+
+    $("#confirmUpload").click(function (e){
+        e.preventDefault();
+        $.ajax({
+            url: ('/api/upload'+location.pathname).replace('/serve/','/'),
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            contentType: false,
+            processData: false,
+            data: new FormData($('#uploadform')[0]),
+            success: () => {
+                alert("File Uploaded");
+                location.reload();
+            }
+        });
+    });
+});
 

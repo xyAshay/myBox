@@ -2,6 +2,16 @@ html,body {
     height: 100%;
 }
 
+nav.navbar{
+    width: 80%;
+    margin: 0px auto 10px auto;
+}
+
+#brand{
+    width: 180px;
+    height: 60px;
+}
+
 .container{
     flex: 1 0 auto;
     padding-bottom: 30px;
