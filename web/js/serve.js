@@ -68,8 +68,13 @@ $(document).ready(() => {
 
     $("#create").submit(() => {
         if($("#dirname").val() != ""){
+            var targetURI;
+            if(location.pathname != '/serve/')
+                targetURI = ('/api/create'+location.pathname+'/'+$("#dirname").val()).replace('/serve/','/');
+            else
+                targetURI = ('/api/create'+'/'+$("#dirname").val());
             $.ajax({
-                url: ('/api/create'+location.pathname+'/'+$("#dirname").val()).replace('/serve/','/'),
+                url: targetURI,
                 type: "POST",
                 success: () => {
                     alert($("#dirname").val() + " Created");
