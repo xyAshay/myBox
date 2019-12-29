@@ -17,13 +17,13 @@ new Vue({
     },
     methods:{
         deleteFile(path){
-            var r = confirm("Delete File "+path);
+            var r = confirm("Delete "+path+" ??");
             if(r == true){
                 $.ajax({
                     url:"/api/delete/"+path,
                     type: "DELETE",
                     success(){
-                        alert("File " + path +" deleted");
+                        alert(path +" Deleted");
                         location.reload();
                     }
                 });
@@ -38,6 +38,7 @@ new Vue({
 
 $(document).ready(() => {
     $("#confirmUpload").hide();
+    $("#newdirform").hide();
 
     $("#uploader").change(() => {
         $("#uploader").hide();
@@ -58,6 +59,26 @@ $(document).ready(() => {
                 location.reload();
             }
         });
+    });
+
+    $("#newdir").click(() => {
+        $("#newdir").hide();
+        $("#newdirform").show();
+    });
+
+    $("#create").submit(() => {
+        if($("#dirname").val() != ""){
+            $.ajax({
+                url: ('/api/create'+location.pathname+'/'+$("#dirname").val()).replace('/serve/','/'),
+                type: "POST",
+                success: () => {
+                    alert($("#dirname").val() + " Created");
+                    location.reload();
+                } 
+            });
+        }
+        else
+            alert("Please Enter Folder Name");
     });
 });
 

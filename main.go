@@ -41,6 +41,7 @@ func createServer(root string) *serverInfo {
 	router.HandleFunc("/api/delete/{path:.*}", init.removeFile).Methods("DELETE")
 	router.HandleFunc("/api/download/{path:.*}", init.downloadFile).Methods("GET")
 	router.HandleFunc("/api/upload/{path:.*}", init.uploadFile).Methods("POST")
+	router.HandleFunc("/api/create/{path:.*}", init.createDir).Methods("POST")
 	router.HandleFunc("/api/assets/{path:.*}", init.getAssets).Methods("GET")
 	router.HandleFunc("/serve/{path:.*}", init.getPath).Methods("GET")
 	router.HandleFunc("/", init.getLanding).Methods("GET")

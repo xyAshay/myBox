@@ -110,7 +110,14 @@ func (info *serverInfo) removeFile(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)["path"]
 	filePath := filepath.Join(info.root, path)
 	fmt.Println(filePath + "  Successfully Deleted ...")
-	os.Remove(filePath)
+	os.RemoveAll(filePath)
+}
+
+func (info *serverInfo) createDir(w http.ResponseWriter, r *http.Request) {
+	path := mux.Vars(r)["path"]
+	dirPath := filepath.Join(info.root, path)
+	os.Mkdir(dirPath, 0777)
+	fmt.Println("Dirpath " + dirPath + " Created")
 }
 
 func (info *serverInfo) getAssets(w http.ResponseWriter, r *http.Request) {
