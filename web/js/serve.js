@@ -39,6 +39,7 @@ new Vue({
 $(document).ready(() => {
     $("#confirmUpload").hide();
     $("#newdirform").hide();
+    $("#loader-wrapper").hide();
 
     $("#uploader").change(() => {
         $("#uploader").hide();
@@ -54,6 +55,11 @@ $(document).ready(() => {
             contentType: false,
             processData: false,
             data: new FormData($('#uploadform')[0]),
+            beforeSend: () => {
+                $("#app").hide();
+                $("#pagenat").hide();
+                $("#loader-wrapper").show();
+            },
             success: () => {
                 alert("File Uploaded");
                 location.reload();

@@ -12,11 +12,21 @@
     <title>myBox Server</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-transparent justify-content-center">
+    <nav id="pagenat" class="navbar navbar-expand-sm bg-transparent justify-content-center">
      <ul class="navbar-nav">
          <li><img id="brand" src="/api/assets/logo.png" alt="Logo"></li>
      </ul>   
     </nav>
+    <div id="loader-wrapper">
+		<div class="group"> 
+		  <div class="bigSqr">
+			<div class="square first"></div>
+			<div class="square second"></div>
+			<div class="square third"></div>
+			<div class="square fourth"></div>
+		  </div>
+        </div>
+    </div>
     
    <div id="app" class="container">
         <div class="row h-100 justify-content-center align-items-center">
@@ -38,7 +48,7 @@
                                 </div>
                             </td>
                             <td class="text-right"><form class="inline-form" id="uploadform">
-                                <label id="uploader" class="btn btn-outline-primary">Upload File<input type="file" name="target" hidden></label>
+                                <label id="uploader" class="btn btn-outline-primary">Upload<input type="file" name="target" hidden></label>
                                 <div id="confirmUpload"><button class="btn btn-outline-success">Confirm</button></div>
                             </form></td>
                         </tr>
