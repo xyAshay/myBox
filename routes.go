@@ -14,7 +14,7 @@ import (
 )
 
 func (info *serverInfo) getLanding(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./web/index.html")
+	fmt.Fprintf(w, "<a href='/serve/'> myBox Server </a>")
 }
 
 func (info *serverInfo) getPath(w http.ResponseWriter, r *http.Request) {

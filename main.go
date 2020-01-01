@@ -52,6 +52,6 @@ func main() {
 	kingpin.Parse()
 	app := createServer("./")
 
-	fmt.Printf("Server Running on https://localhost%s \nDeveloper : %t\n", *port, *dev)
+	fmt.Printf("Server Running on http://localhost%s/serve/ \nDeveloper : %t\n", *port, *dev)
 	log.Fatal(http.ListenAndServe(*port, app))
 }
