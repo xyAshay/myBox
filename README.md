@@ -1,6 +1,6 @@
 <h1 align='center'>myBox</h1>
 
-**Update [Dec 2019]** : Project has been discontinued due to a bug in the dependencies causing the app to choke the entire bandwidth.
+**Update [Dec 2019]** : Project has been discontinued due to a bug in the dependencies causing the app to keep bandwidth utilized more than requirements.
 
 <p align='center'>
     <img width="450" height="150" src="web/logo.png">
