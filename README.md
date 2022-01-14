@@ -15,7 +15,7 @@
 ## Concept
 myBox opens up a port on the network and utilizes it for two-way transfer of data to/from the server system and the connected devices in the network.
 
-The devices can interact with the server using the provided web framework to send and receive data. All the data sent to the server in stored on the local disc.
+The devices can interact with the server using the provided web framework to send and receive data. All the data sent to the server in stored on the local discs.
 
 <br/>
 
